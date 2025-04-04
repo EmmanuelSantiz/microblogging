@@ -43,8 +43,8 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorResponseModel> handleResourceNotFound(ResourceNotFoundException e) {
         ErrorResponseModel errorResponse = new ErrorResponseModel(
-                ErrorCode.USER_NOT_FOUND.getCode(),
-                ErrorCode.USER_NOT_FOUND.getMessage(),
+                ErrorCode.DATA_NOT_FOUND.getCode(),
+                ErrorCode.DATA_NOT_FOUND.getMessage(),
                 e.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
@@ -75,5 +75,31 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, message);
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+
+    /**
+     * Maneja errores de tipo NullPointerException y retorna una respuesta estandarizada con código y mensaje.
+     */
+    @ExceptionHandler(NullPointerException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ErrorResponseModel> handleNullPointerError(NullPointerException e) {
+        // Puedes agregar detalles del error si es necesario, como un mensaje adicional o stack trace.
+        ErrorResponseModel errorResponse = new ErrorResponseModel(
+                ErrorCode.INTERNAL_SERVER_ERROR.getCode(),
+                ErrorCode.INTERNAL_SERVER_ERROR.getMessage(),
+                e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * Maneja errores de tipo RuntimeException y retorna una respuesta estandarizada con código y mensaje.
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Ocurrió un error: " + ex.getMessage());
     }
 }

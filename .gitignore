@@ -31,4 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
-.qodo
+.qodo/
+.mvn/
+
+### RabbitMQ ###
+rabbitmq/
+
+HELP.md
+mvnw.cmd
+mvnw

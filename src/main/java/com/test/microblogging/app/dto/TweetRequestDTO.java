@@ -9,8 +9,10 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 import com.test.microblogging.app.entity.Tweet;
+import com.test.microblogging.app.entity.TweetInteraction;
 import com.test.microblogging.app.entity.User;
 import com.test.microblogging.utils.Constantes;
+import com.test.microblogging.utils.enums.InteractionType;
 
 import jakarta.validation.constraints.Size;
 @Data
@@ -20,14 +22,14 @@ import jakarta.validation.constraints.Size;
 @Setter
 public class TweetRequestDTO {
 
-    @jakarta.validation.constraints.NotNull(message = "Content cannot be null")
-    @jakarta.validation.constraints.NotEmpty(message = "Username cannot be empty")
-    @Size(min = 1, max = Constantes.MAX_CHARACTERES, message = "Content must be between 1 and " + Constantes.MAX_CHARACTERES + " characters")
+    @jakarta.validation.constraints.NotNull(message = "Comentario no puedes ser null")
+    @jakarta.validation.constraints.NotEmpty(message = "Comentario no puede estar vacío")
+    @Size(min = 1, max = Constantes.MAX_CHARACTERES, message = "Comentario debe tener entre 1  y " + Constantes.MAX_CHARACTERES + " caracteres")
     private String content;
 
-    @jakarta.validation.constraints.NotNull(message = "Content cannot be null")
-    @jakarta.validation.constraints.NotEmpty(message = "Username cannot be empty")
-    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
+    @jakarta.validation.constraints.NotNull(message = "Nombre de usuario no puede ser null")
+    @jakarta.validation.constraints.NotEmpty(message = "Nombre de usuario no puede estar vacio")
+    @Size(min = 3, max = 20, message = "Nombre de usuario debe tener entre 3 y 20 characters")
     private String username;
 
     public Tweet toEntity(TweetRequestDTO tweetRequestDTO, User user) {
@@ -36,5 +38,14 @@ public class TweetRequestDTO {
         tweet.setUser(user);
         tweet.setContent(tweetRequestDTO.getContent());
         return tweet;
+    }
+
+    public TweetInteraction toEntityInteraction(TweetRequestDTO tweetRequestDTO, User user, Tweet tweet) {
+        TweetInteraction comment = new TweetInteraction();
+        comment.setInteractionType(InteractionType.COMMENT);
+        comment.setCommentText(tweetRequestDTO.getContent());
+        comment.setUser(user);
+        comment.setTweet(tweet);
+        return comment;
     }
  }

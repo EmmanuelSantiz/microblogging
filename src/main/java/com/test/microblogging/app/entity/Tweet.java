@@ -3,7 +3,20 @@ package com.test.microblogging.app.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +24,13 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Modelo de la entidad Tweet.
+ * Representa un tweet realizado por un usuario.
+ * Contiene información sobre el contenido del tweet, la fecha de creación y la relación con el usuario que lo creó.
+ * @author Emmanuel Santiz
+ * @date 2025-04-01
+ */
 @Getter
 @Setter
 @Entity

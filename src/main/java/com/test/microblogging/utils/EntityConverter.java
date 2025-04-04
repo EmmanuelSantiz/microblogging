@@ -16,8 +16,8 @@ public class EntityConverter {
         this.objectMapper = objectMapper;
     }
 
-    // Convertir la entidad User a un mapa
-    public Map<String, Object> convertToMap(Tweet tweet) {
+    // Convertir la entidad Tweet a un mapa
+    public Map<String, Object> convertTweetToMap(Tweet tweet) {
         return objectMapper.convertValue(tweet, Map.class);
     }
 }

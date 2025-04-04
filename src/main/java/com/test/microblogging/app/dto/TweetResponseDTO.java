@@ -16,7 +16,6 @@ public class TweetResponseDTO {
     private String content;
     private LocalDateTime createdAt;
     private String username;
-    //private Long userId;
 
     public TweetResponseDTO from(Tweet tweet) {
         TweetResponseDTO tweetResponseDTO = new TweetResponseDTO();

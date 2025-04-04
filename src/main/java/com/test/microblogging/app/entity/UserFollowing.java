@@ -2,10 +2,27 @@ package com.test.microblogging.app.entity;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Modelo de la entidad UserFollowing.
+ * Representa la relación de seguimiento entre dos usuarios en la aplicación de microblogging.
+ * Contiene información sobre el usuario que sigue (follower), el usuario seguido (followed) y la fecha de seguimiento.
+ * @author Emmanuel Santiz
+ * @date 2025-04-01
+ */
 @Getter
 @Setter
 @Entity
@@ -16,7 +33,7 @@ import lombok.Setter;
     @UniqueConstraint(columnNames = {"follower_id", "followed_id"})
 })
 public class UserFollowing {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

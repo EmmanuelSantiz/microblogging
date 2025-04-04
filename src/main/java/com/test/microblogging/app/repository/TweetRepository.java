@@ -7,30 +7,46 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
+
 @Repository
 public interface TweetRepository extends JpaRepository<Tweet, Long> {
+    
     /**
-     * Find all tweets by user IDs in descending order of creation date.
-     *
-     * @param userIds List of user IDs to find tweets for.
-     * @return List of tweets ordered by creation date in descending order.
+     * Consulta todos los tweets por lista de IDs de usuarios en orden decendente con relacion a la fecha.
+     * @param userIds
+     * @return List<Tweet>
+     * @author Emmanuel Santiz
+     * @date 2025-04-01
      */
-    List<Tweet> findByUserIdInOrderByCreatedAtDesc(List<Long> userIds);
+    List<Tweet> findByUserIdInOrderByCreatedAtDesc(List<Long> userIds, Pageable pageable);
 
     /**
-     * Find a tweet by its ID.
-     *
-     * @param id ID of the tweet to find.
-     * @return Optional containing the found tweet, or empty if not found.
+     * Consulta un tweet por ID.
+     * @param id
+     * @return Optional<Tweet>
+     * @author Emmanuel Santiz
+     * @date 2025-04-01
      */
     Optional<Tweet> findById(Long id);
 
     /**
-     * Find all tweets by a specific user ID in descending order of creation date.
-     *
-     * @param userId ID of the user to find tweets for.
-     * @return List of tweets ordered by creation date in descending order.
+     * Consulta todos los tweets por ID de usuario en orden decendente con relacion a la fecha.
+     * @param userId
+     * @return List<Tweet>
+     * @author Emmanuel Santiz
+     * @date 2025-04-01
      */
-    List<Tweet> findByUserIdOrderByCreatedAtDesc(Long userId);
+    List<Tweet> findByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable);
+
+    /**
+     * Consulta si existe ya un tweet con esta informacion
+     * @param username
+     * @param content
+     * @return Tweet
+     * @author Emmanuel Santiz
+     * @date 2025-04-01
+     */
+    Optional<Tweet> findByUserUsernameAndContent(String username, String content);
 
 }

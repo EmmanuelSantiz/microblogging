@@ -3,15 +3,31 @@ package com.test.microblogging.app.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.test.microblogging.utils.enums.InteractionType;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 /**
- * Entity representing user interactions with tweets (comments and likes).
- * This entity allows users to comment on tweets and/or mark them as liked.
+ * Modelo de la entidad TweetInteraction.
+ * Representa una interacción (comentario, like, etc.) realizada por un usuario en un tweet.
+ * Contiene información sobre el tipo de interacción, el texto del comentario (si aplica), la fecha de creación y la relación con el tweet y el usuario.
+ * @author Emmanuel Santiz
+ * @date 2025-04-01
  */
 @Getter
 @Setter
@@ -27,44 +43,25 @@ public class TweetInteraction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * The type of interaction (COMMENT or LIKE)
-     */
     @Enumerated(EnumType.STRING)
     @Column(name = "interaction_type", nullable = false)
     private InteractionType interactionType;
 
-    /**
-     * Comment text (only used when interactionType is COMMENT)
-     */
     @Column(name = "comment_text", length = 280)
     private String commentText;
 
-    /**
-     * When the interaction was created
-     */
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    /**
-     * The tweet being interacted with
-     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tweet_id", nullable = false)
     @JsonBackReference
     private Tweet tweet;
 
-    /**
-     * The user who created the interaction
-     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference(value = "user-interactions")
     private User user;
-
-    /**
-     * Pre-persist hook to set the creation timestamp
-     */
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

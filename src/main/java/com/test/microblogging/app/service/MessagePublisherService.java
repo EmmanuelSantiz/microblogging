@@ -2,6 +2,7 @@ package com.test.microblogging.app.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.microblogging.app.entity.Tweet;
+import com.test.microblogging.utils.Constantes;
 import com.test.microblogging.utils.EntityConverter;
 
 import lombok.extern.log4j.Log4j2;
@@ -15,6 +16,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+/**
+ * MessagePublisherService.java
+ * @author Emmanuel Santiz
+ * @date 2025-04-01
+ */
 @Log4j2
 @Service
 public class MessagePublisherService {
@@ -30,12 +36,21 @@ public class MessagePublisherService {
         this.objectMapper = objectMapper;
     }
 
+    /**
+     * Publish a tweet to RabbitMQ
+     * 
+     * @param tweet the tweet to publish
+     * @throws Exception if an error occurs while publishing the tweet
+     * @author Emmanuel Santiz
+     * @date 2025-04-01
+     */
     public void publishTweet(Tweet tweet) {
+        log.info("Enviando informacion de Tweet: [{}] a RabbitMQ", tweet);
         // Obtener el traceId del MDC (Mapped Diagnostic Context) de Sleuth
         String traceId = org.slf4j.MDC.get("X-B3-TraceId");
 
         // Convertir el Tweet a un mapa
-        Map<String, Object> tweetMap = entityConverter.convertToMap(tweet);
+        Map<String, Object> tweetMap = entityConverter.convertTweetToMap(tweet);
 
         try {
             // Convertir el mapa a un JSON (String)
@@ -48,7 +63,7 @@ public class MessagePublisherService {
                     .build();
 
             // Enviar el mensaje a RabbitMQ
-            rabbitTemplate.send("myExchange", "myRoutingKey", rabbitMessage);
+            rabbitTemplate.send(Constantes.RABBITMQ_EXCHANGE_NAME, Constantes.RABBITMQ_ROUTING_KEY, rabbitMessage);
             log.info("Mensaje enviado a RabbitMQ: {}", tweetJson);
         } catch (Exception e) {
             e.printStackTrace();
